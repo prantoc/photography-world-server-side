@@ -25,8 +25,19 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const serviceCollection = client.db('phWorld').collection('services')
-
         //service api
+        app.get('/services', async (req, res) => {
+            const cursor = serviceCollection.find({});
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.get('/service/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const singleService = await serviceCollection.findOne(query);
+            res.send(singleService)
+        })
         app.post('/add-service', async (req, res) => {
             const service = req.body
             const result = await serviceCollection.insertOne(service);
