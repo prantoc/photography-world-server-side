@@ -68,6 +68,19 @@ async function run() {
             res.send(result)
         })
 
+        //# user-api 
+        app.get('/user-review', async (req, res) => {
+            const query = { userId: req.query.id };
+            const options = {
+                // sort returned documents in ascending order by title (A->Z)
+                sort: { createdAT: -1 },
+            };
+            const cursor = reviewCollection.find(query, options);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+
 
     } catch (error) {
 
