@@ -25,7 +25,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const serviceCollection = client.db('phWorld').collection('services')
-        //service api
+        const reviewCollection = client.db('phWorld').collection('reviews')
+        //# service api
         app.get('/services', async (req, res) => {
             const query = {}
             const options = {
@@ -48,6 +49,25 @@ async function run() {
             const result = await serviceCollection.insertOne(service);
             res.send(result)
         })
+
+        //# review api 
+        app.post('/add-review', async (req, res) => {
+            const review = req.body
+            const result = await reviewCollection.insertOne(review);
+            res.send(result)
+        })
+
+        app.get('/reviews', async (req, res) => {
+            const query = { serviceId: req.query.id };
+            const options = {
+                // sort returned documents in ascending order by title (A->Z)
+                sort: { createdAT: -1 },
+            };
+            const cursor = reviewCollection.find(query, options);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
 
     } catch (error) {
 
