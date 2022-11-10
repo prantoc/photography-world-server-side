@@ -27,7 +27,12 @@ async function run() {
         const serviceCollection = client.db('phWorld').collection('services')
         //service api
         app.get('/services', async (req, res) => {
-            const cursor = serviceCollection.find({});
+            const query = {}
+            const options = {
+                // sort returned documents in ascending order by title (A->Z)
+                sort: { createdAT: -1 },
+            };
+            const cursor = serviceCollection.find(query, options);
             const result = await cursor.toArray();
             res.send(result)
         })
