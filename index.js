@@ -37,6 +37,16 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result)
         })
+        app.get('/services-by-id', async (req, res) => {
+            const query = { _id: ObjectId(req.query.id) };
+            const options = {
+                // sort returned documents in ascending order by title (A->Z)
+                sort: { createdAT: -1 },
+            };
+            const cursor = serviceCollection.find(query, options);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
 
         app.get('/service/:id', async (req, res) => {
             const id = req.params.id;
