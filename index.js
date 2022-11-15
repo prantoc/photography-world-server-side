@@ -79,7 +79,7 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/reviews', verifyJWT, async (req, res) => {
+        app.get('/reviews', async (req, res) => {
             const query = { serviceId: req.query.id };
             const options = {
                 // sort returned documents in ascending order by title (A->Z)
